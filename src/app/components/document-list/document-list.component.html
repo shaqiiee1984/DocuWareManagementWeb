@@ -1,0 +1,47 @@
+<div class="document-list">
+  <h2>Uploaded Documents</h2>
+
+  <!-- Show the loading spinner if 'isLoading' is true -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <p>Loading...</p>
+  </div>
+
+  <!-- Show the table when documents are loaded and not loading -->
+  <table *ngIf="!isLoading && documents.length > 0">
+    <thead>
+      <tr>
+        <th>Document ID</th>          
+        <th>Document Type</th>
+        <th>Document Size</th>
+        <th>Stored On</th>
+        <th>Cabinet</th>          
+        <th>Company</th>
+        <th>Contact Name</th>
+        <th>Birthday</th>
+        <th>Delete</th> <!-- New column for delete action -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let document of documents">
+        <td>{{ getFieldValue(document, 'DWDOCID') }}</td> <!-- Document ID -->
+        <td>{{ getFieldValue(document, 'DWEXTENSION') }}</td> <!-- Document Type (File extension) -->
+        <!-- <td>{{ getFieldValue(document, 'DWDOCSIZE') | number }} KB</td> Document Size -->
+        <td>{{ getFileSizeInMB(document) | number:'1.2-2' }} MB</td> <!-- Document Size in MB -->
+
+        <td>{{ getFieldValue(document, 'DWSTOREDATETIME') | date:'medium' }}</td> <!-- Stored On -->
+        <td>{{ getFieldValue(document, '@CABINETNAME') }}</td> <!-- Cabinet Name -->
+        <td>{{ getFieldValue(document, 'COMPANY') }}</td> <!-- Company Name -->
+        <td>{{ getFieldValue(document, 'CONTACT') }}</td> <!-- Contact Name -->
+        <td>{{ getFieldValue(document, 'BIRTHDAY') | date:'mediumDate' }}</td> <!-- Birthday -->
+        <td>
+          <button (click)="deleteDocument(document)">
+            <span class="delete-icon">🗑️</span>
+          </button>
+        </td> <!-- Delete action -->
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Show message when there are no documents and not loading -->
+  <p *ngIf="!isLoading && documents.length === 0">No documents available.</p>
+</div>
